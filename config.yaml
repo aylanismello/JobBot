@@ -4,6 +4,6 @@ linked_in:
   phone_num: "415-608-8533"
   resume_path: "/Users/aylanmello/Documents/A.A/job/aylanmello_resume.pdf"
 
-job_bot:
+settings:
   batch_num: 5
   load_time: 1

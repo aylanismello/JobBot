@@ -4,21 +4,20 @@ require 'yaml'
 
 
 class JobBot
-		EMAIL = "aylanismello@gmail.com"
-		PASSWORD = "L08181991d"
+		CONFIG = YAML.load_file('config.yaml')
+
+		EMAIL = CONFIG['linked_in']['email']
+		PASSWORD = CONFIG['linked_in']['password']
+		PHONE_NUM = CONFIG['linked_in']['phone_num']
+		PATH_TO_RESUME = CONFIG['linked_in']['resume_path']
+
+		LOAD_TIME = CONFIG['settings']['load_time']
+		JOB_BATCH_NUM = CONFIG['settings']['batch_num']
 		APPLY_ID = "apply-job-button"
 		JOBS_PAGE = "https://www.linkedin.com/jobs/?trk=nav_responsive_sub_nav_jobs"
 		HOME = "https://linkedin.com"
-		LOAD_TIME = 1
-		PHONE_NUM = "415-608-8533"
-		JOB_BATCH_NUM = 5
-		PATH_TO_RESUME = '/Users/aylanmello/Documents/A.A/job/aylanmello_resume.pdf'
 
 	def initialize
-
-		config = YAML.load_file('config.yaml')
-		byebug
-
 		@driver = Selenium::WebDriver.for :chrome
 		filename = "JobBot:".concat(Time.now.to_s[0..15].split(" ").join("&"))
 		@file = File.open(filename, 'w')
