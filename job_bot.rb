@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require "selenium-webdriver"
 require "byebug"
 require 'yaml'
@@ -11,6 +12,8 @@ class JobBot
 		PHONE_NUM = CONFIG['linked_in']['phone_num']
 		PATH_TO_RESUME = CONFIG['linked_in']['resume_path']
 
+		FILTERS = CONFIG['settings']['filters']
+		TESTING = CONFIG['settings']['testing']
 		LOAD_TIME = CONFIG['settings']['load_time']
 		JOB_BATCH_NUM = CONFIG['settings']['batch_num']
 		APPLY_ID = "apply-job-button"
@@ -19,10 +22,13 @@ class JobBot
 
 	def initialize
 		@driver = Selenium::WebDriver.for :chrome
+		byebug
 		filename = "JobBot:".concat(Time.now.to_s[0..15].split(" ").join("&"))
-		@file = File.open(filename, 'w')
+
+		@file = File.open(filename, 'w') unless TESTING
 
 		login
+		# show_more_jobs
 		get_job_links
 		iterate_jobs
 		@driver.quit
@@ -55,10 +61,6 @@ class JobBot
 		companies.each.with_index do |company, idx|
 			@jobs[company] = links[idx]
 		end
-
-
-
-
 	end
 
 	def go_to(link)
@@ -73,22 +75,37 @@ class JobBot
 		follow_radio_button.click
 
 		phone_field = @driver.find_element(:name, 'phone')
+		phone_field.clear
 		phone_field.send_keys PHONE_NUM
 
 		resume_submit_button = @driver.find_element(:id, 'file-browse-input')
+		resume_submit_button.clear
 		resume_submit_button.send_keys(PATH_TO_RESUME)
 		# wait for resume upload
 		sleep(LOAD_TIME)
 
-		puts "Applying to #{company}"
+		submit_app_button = @driver.find_element(:id, 'send-application-button')
+
+		unless TESTING
+			submit_app_button.click
+			puts "Applied to #{company}"
+			@file.write("#{company}\n")
+		end
 
 
-		@file.write("#{company}\n")
+		sleep(LOAD_TIME)
 
 	end
 
-	def is_job_acceptable?(apply_button, company_name_and_desc)
-		apply_button.any? && !company_name_and_desc.downcase.include?('intern')
+	def is_job_acceptable?(apply_button, company)
+		apply_button.any? && FILTERS.none?{|filter| company.downcase.include?(filter)}
+	end
+
+	def show_more_jobs
+		@driver.navigate.to JOBS_PAGE
+		sleep(LOAD_TIME)
+		expand_button = @driver.find_element(:class, 'expand-button')
+		expand_button.click
 	end
 
 	def iterate_jobs
@@ -105,7 +122,8 @@ class JobBot
 			sleep(LOAD_TIME)
 		end
 
-		@file.close
+
+		@file.close unless TESTING
 	end
 
 

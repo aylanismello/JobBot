@@ -5,5 +5,9 @@ linked_in:
   resume_path: "/Users/aylanmello/Documents/A.A/job/aylanmello_resume.pdf"
 
 settings:
-  batch_num: 5
+  batch_num: 50
   load_time: 1
+  testing: false
+  filters:
+    - 'senior'
+    - 'intern'
