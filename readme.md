@@ -10,10 +10,18 @@
 variable by opening up your .bashrc (or .zshrc, etc) file
 and adding the following line:
 	`export PATH=$PATH:/chromedriver/location`
-* run script in root directory with `ruby job_bot.rb`
+* run script in repo directory with `ruby job_bot.rb`
 
 
-### Configurations (config.yam`l)
-* Put all of your linked in login info under linked_in
-* Add you phone number and the absolute path to your resume on your local machine
-* Set keyword flags for jobs you don't want to apply to under *filters*
+### config.yaml
+`EMAIL / PASSWORD` Put your linked in login credentials here
+
+`PHONE NUMBER` You need your phone number to apply
+
+`RESUME_PATH` The absolute path to your resume on your local machine
+
+`FILTERS` Set keyword flags for jobs you don't want to apply to under *filters*
+
+`FOLLOW_COMPANIES` Set to false if you don't want to auto follow companies you apply to
+
+`LOAD_TIME` time between selenium actions. adjust according to speed of internet connection

@@ -12,7 +12,7 @@ class JobBot
 		PATH_TO_RESUME = CONFIG['linked_in']['resume_path']
 
 
-		FILTERS = CONFIG['settings']['filters']
+		FILTERS = CONFIG['settings']['filters'].map(&:downcase)
 		TESTING = CONFIG['settings']['testing']
 		LOAD_TIME = CONFIG['settings']['load_time']
 		FOLLOW_COMPANIES = CONFIG['settings']['follow_companies']
@@ -73,7 +73,7 @@ class JobBot
 		sleep(LOAD_TIME)
 
 
-		unless FOLLOW_COMPANIES
+		if !FOLLOW_COMPANIES && !company.include?('linkedin')
 			follow_radio_button = @driver.find_element(:name, 'followCompany')
 			follow_radio_button.click
 		end
