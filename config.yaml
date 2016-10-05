@@ -1,13 +1,14 @@
 linked_in:
-  email: "aylanismello@gmail.com"
-  password: "L08181991d"
-  phone_num: "415-608-8533"
-  resume_path: "/Users/aylanmello/Documents/A.A/job/aylanmello_resume.pdf"
+  email: ""
+  password: ""
+  phone_num: "555-555-5555"
+  resume_path: "/absolute/path/your_resume.pdf"
 
 settings:
-  batch_num: 50
   load_time: 1
   testing: false
   filters:
-    - 'senior'
-    - 'intern'
+    - 'keywords'
+    - 'you'
+    - 'dont'
+    - 'want'

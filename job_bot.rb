@@ -15,20 +15,20 @@ class JobBot
 		FILTERS = CONFIG['settings']['filters']
 		TESTING = CONFIG['settings']['testing']
 		LOAD_TIME = CONFIG['settings']['load_time']
-		JOB_BATCH_NUM = CONFIG['settings']['batch_num']
+		JOB_BATCH_NUM = 2
 		APPLY_ID = "apply-job-button"
 		JOBS_PAGE = "https://www.linkedin.com/jobs/?trk=nav_responsive_sub_nav_jobs"
 		HOME = "https://linkedin.com"
 
 	def initialize
 		@driver = Selenium::WebDriver.for :chrome
-		byebug
 		filename = "JobBot:".concat(Time.now.to_s[0..15].split(" ").join("&"))
 
 		@file = File.open(filename, 'w') unless TESTING
 
 		login
-		# show_more_jobs
+		@driver.navigate.to JOBS_PAGE
+		JOB_BATCH_NUM.times {show_more_jobs}
 		get_job_links
 		iterate_jobs
 		@driver.quit
@@ -44,8 +44,8 @@ class JobBot
 	end
 
 	def get_job_links
-		@driver.navigate.to JOBS_PAGE
-		puts @driver.current_url
+		# @driver.navigate.to JOBS_PAGE
+		# puts @driver.current_url
 		# byebug
 		sleep(LOAD_TIME)
 
@@ -102,14 +102,14 @@ class JobBot
 	end
 
 	def show_more_jobs
-		@driver.navigate.to JOBS_PAGE
 		sleep(LOAD_TIME)
 		expand_button = @driver.find_element(:class, 'expand-button')
 		expand_button.click
+		sleep(LOAD_TIME)
 	end
 
 	def iterate_jobs
-		job_count = 0
+		# job_count = 0
 
 		@jobs.each do |company, link|
 			puts "going to #{company}"
@@ -117,10 +117,11 @@ class JobBot
 			sleep(LOAD_TIME)
 			apply_button = @driver.find_elements(:id, 'apply-job-button')
 			job_apply(apply_button.first, company) if is_job_acceptable?(apply_button, company)
-			job_count += 1
-			break if job_count > JOB_BATCH_NUM
 			sleep(LOAD_TIME)
 		end
+
+			# job_count += 1
+			# iterate_jobs if job_count > JOB_BATCH_NUM
 
 
 		@file.close unless TESTING
