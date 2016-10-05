@@ -3,7 +3,6 @@ require "selenium-webdriver"
 require "byebug"
 require 'yaml'
 
-
 class JobBot
 		CONFIG = YAML.load_file('config.yaml')
 
@@ -12,9 +11,11 @@ class JobBot
 		PHONE_NUM = CONFIG['linked_in']['phone_num']
 		PATH_TO_RESUME = CONFIG['linked_in']['resume_path']
 
+
 		FILTERS = CONFIG['settings']['filters']
 		TESTING = CONFIG['settings']['testing']
 		LOAD_TIME = CONFIG['settings']['load_time']
+		FOLLOW_COMPANIES = CONFIG['settings']['follow_companies']
 		JOB_BATCH_NUM = 2
 		APPLY_ID = "apply-job-button"
 		JOBS_PAGE = "https://www.linkedin.com/jobs/?trk=nav_responsive_sub_nav_jobs"
@@ -71,8 +72,11 @@ class JobBot
 		apply_button.click
 		sleep(LOAD_TIME)
 
-		follow_radio_button = @driver.find_element(:name, 'followCompany')
-		follow_radio_button.click
+
+		unless FOLLOW_COMPANIES
+			follow_radio_button = @driver.find_element(:name, 'followCompany')
+			follow_radio_button.click
+		end
 
 		phone_field = @driver.find_element(:name, 'phone')
 		phone_field.clear

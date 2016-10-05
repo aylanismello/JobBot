@@ -6,6 +6,7 @@ linked_in:
 
 settings:
   load_time: 1
+  follow_companies: false
   testing: false
   filters:
     - 'keywords'

@@ -3,7 +3,7 @@
 
 **Installation**
 
-* `git clone git@github.com:aylanismello/JobBot.git`
+* `git clone`
 * `bundle install`
 * Download latest version of chrome driver for appropriate OS [here](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 * Add the location of where you installed to your ENV path
@@ -13,7 +13,7 @@ and adding the following line:
 * run script in root directory with `ruby job_bot.rb`
 
 
-### Configurations (config.yaml)
-* Put all of your linked in login info under lined_in
+### Configurations (config.yam`l)
+* Put all of your linked in login info under linked_in
 * Add you phone number and the absolute path to your resume on your local machine
 * Set keyword flags for jobs you don't want to apply to under *filters*
