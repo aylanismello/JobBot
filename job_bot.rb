@@ -45,9 +45,6 @@ class JobBot
 	end
 
 	def get_job_links
-		# @driver.navigate.to JOBS_PAGE
-		# puts @driver.current_url
-		# byebug
 		sleep(LOAD_TIME)
 
 		puts @driver.title
@@ -83,9 +80,7 @@ class JobBot
 		phone_field.send_keys PHONE_NUM
 
 		resume_submit_button = @driver.find_element(:id, 'file-browse-input')
-		resume_submit_button.clear
 		resume_submit_button.send_keys(PATH_TO_RESUME)
-		# wait for resume upload
 		sleep(LOAD_TIME)
 
 		submit_app_button = @driver.find_element(:id, 'send-application-button')
@@ -96,9 +91,7 @@ class JobBot
 			@file.write("#{company}\n")
 		end
 
-
 		sleep(LOAD_TIME)
-
 	end
 
 	def is_job_acceptable?(apply_button, company)
@@ -113,8 +106,6 @@ class JobBot
 	end
 
 	def iterate_jobs
-		# job_count = 0
-
 		@jobs.each do |company, link|
 			puts "going to #{company}"
 			go_to(link)
@@ -124,14 +115,9 @@ class JobBot
 			sleep(LOAD_TIME)
 		end
 
-			# job_count += 1
-			# iterate_jobs if job_count > JOB_BATCH_NUM
-
 
 		@file.close unless TESTING
 	end
-
-
 end
 
 JobBot.new
