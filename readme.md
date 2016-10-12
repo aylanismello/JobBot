@@ -1,5 +1,7 @@
 ## JobBot
 
+![gif](http://im2.ezgif.com/tmp/ezgif-1098154881.gif)
+
 **Installation**
 
 * `git clone`
