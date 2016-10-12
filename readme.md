@@ -1,5 +1,4 @@
 ## JobBot
-### Making applying suck slightly less
 
 **Installation**
 
@@ -12,6 +11,8 @@ and adding the following line:
 	`export PATH=$PATH:/chromedriver/location`
 * run script in repo directory with `ruby job_bot.rb`
 
+*Jobs applied to are saved to log files created in the root repo directory
+in the format JobBot:YYYY-MM-DD&HH:MM*
 
 ### config.yaml
 `EMAIL / PASSWORD` Put your linked in login credentials here

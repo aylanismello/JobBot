@@ -5,7 +5,9 @@ linked_in:
   resume_path: "/absolute/path/your_resume.pdf"
 
 settings:
-  load_time: 1
+  #how many seconds between click/submit actions. increase if getting
+  # a "spinner" related error
+  load_time: 2
   follow_companies: false
   testing: false
   filters:
