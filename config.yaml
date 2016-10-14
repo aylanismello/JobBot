@@ -2,13 +2,21 @@ linked_in:
   email: ""
   password: ""
   phone_num: "555-555-5555"
-  resume_path: "/absolute/path/your_resume.pdf"
+  resume_path: ""
 
 settings:
   load_time: 1
   testing: false
   filters:
-    - 'keywords'
-    - 'you'
-    - 'dont'
-    - 'want'
+    - 'Apple'
+    - 'Facebook'
+    - 'Uber'
+    - 'Groupon'
+    - 'Google'
+    - 'LinkedIn'
+    - 'Amazon'
+    - 'Ebay'
+    - 'Senior'
+    - 'Backend'
+    - 'Sr'
+    - 'Sr.'
