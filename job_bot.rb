@@ -12,11 +12,14 @@ class JobBot
 		PATH_TO_RESUME = CONFIG['linked_in']['resume_path']
 
 
+
 		FILTERS = CONFIG['settings']['filters'].map(&:downcase)
 		TESTING = CONFIG['settings']['testing']
 		LOAD_TIME = CONFIG['settings']['load_time']
 		FOLLOW_COMPANIES = CONFIG['settings']['follow_companies']
 		JOB_BATCH_NUM = 2
+		BATCH_NUM = CONFIG['zip_recruiter']['batch_num']
+
 		APPLY_ID = "apply-job-button"
 		JOBS_PAGE = "https://www.linkedin.com/jobs/?trk=nav_responsive_sub_nav_jobs"
 		HOME = "https://linkedin.com"
@@ -28,20 +31,39 @@ class JobBot
 		@file = File.open(filename, 'w') unless TESTING
 
 		zip_bot
-		# @driver.quit
+		@file.close unless TESTING
+
 
 	end
 
 	def zip_bot
+
+
+		@file.write("   ZIP RECRUITER\n")
+		@file.write("-"*20)
+		@file.write("\n")
+
 		@driver.navigate.to "https://www.ziprecruiter.com/login?realm=candidates"
 		username = @driver.find_element(:name, 'email')
-		username.send_keys 'aylanismello@gmail.com'
+		username.send_keys CONFIG['zip_recruiter']['email']
 		password = @driver.find_element(:name, 'password')
-		password.send_keys 'Z08181991r'
+		password.send_keys CONFIG['zip_recruiter']['password']
 
 		submit_button = @driver.find_element(:name, 'submitted')
 		submit_button.click
 
+		BATCH_NUM.times do |idx|
+
+			get_and_apply_zip
+			@driver.navigate.refresh unless (BATCH_NUM - idx) == 1
+
+		end
+
+
+
+	end
+
+	def get_and_apply_zip
 		all_jobs = @driver.find_elements(:class, 'job_content')
 		jobs = []
 
@@ -50,7 +72,6 @@ class JobBot
 			jobs << job if apply_button.text == "1-Click Apply"
 		end
 
-		jobs_applied_to
 
 		jobs.each do |job|
 
@@ -59,17 +80,12 @@ class JobBot
 			location = job.find_element(:class, 'job_location').text
 			apply_button = job.find_element(:css, '.apply_area > a')
 
-			jobs_applied_to << "#{company_name}: #{position} - (#{location})"
-			byebug
-			
+			job_str = "#{company_name}: #{position} - (#{location})\n"
 			apply_button.click
+			sleep(1)
+			@file.write(job_str)
 
 		end
-
-
-		# name : title
-
-
 
 	end
 
@@ -166,7 +182,6 @@ class JobBot
 		end
 
 
-		@file.close unless TESTING
 	end
 end
 
