@@ -4,6 +4,7 @@ GEM
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
     ffi (1.9.14)
+    ruby-progressbar (1.8.1)
     rubyzip (1.2.0)
     selenium-webdriver (2.53.4)
       childprocess (~> 0.5)
@@ -17,6 +18,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ruby-progressbar (~> 1.8, >= 1.8.1)
   selenium-webdriver
   watir-webdriver
 

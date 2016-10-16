@@ -1,19 +1,19 @@
 linked_in:
-  email: ""
-  password: ""
+  email: "email"
+  password: "password"
   phone_num: "555-555-5555"
-  resume_path: "/absolute/path/your_resume.pdf"
+  resume_path: "/path/to/your/resume.pdf"
+  follow_companies: false
 
 zip_recruiter:
-  email: "aylanismello@gmail.com"
-  password: "Z08181991r"
+  email: "email"
+  password: "password"
   batch_num: 2
 
 settings:
   #how many seconds between click/submit actions. increase if getting
   # a "spinner" related error
   load_time: 2
-  follow_companies: false
   testing: false
   filters:
     - 'keywords'
