@@ -9,6 +9,8 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
+    watir-webdriver (0.9.3)
+      selenium-webdriver (>= 2.46.2)
     websocket (1.2.3)
 
 PLATFORMS
@@ -16,6 +18,7 @@ PLATFORMS
 
 DEPENDENCIES
   selenium-webdriver
+  watir-webdriver
 
 BUNDLED WITH
    1.12.5

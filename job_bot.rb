@@ -27,13 +27,63 @@ class JobBot
 
 		@file = File.open(filename, 'w') unless TESTING
 
+		zip_bot
+		# @driver.quit
+
+	end
+
+	def zip_bot
+		@driver.navigate.to "https://www.ziprecruiter.com/login?realm=candidates"
+		username = @driver.find_element(:name, 'email')
+		username.send_keys 'aylanismello@gmail.com'
+		password = @driver.find_element(:name, 'password')
+		password.send_keys 'Z08181991r'
+
+		submit_button = @driver.find_element(:name, 'submitted')
+		submit_button.click
+
+		all_jobs = @driver.find_elements(:class, 'job_content')
+		jobs = []
+
+		all_jobs.each do |job|
+			apply_button = job.find_element(:css, '.apply_area > a')
+			jobs << job if apply_button.text == "1-Click Apply"
+		end
+
+		jobs_applied_to
+
+		jobs.each do |job|
+
+			company_name = job.find_element(:class, 'hiring_company_name').text
+			position = job.find_element(:class, 'panel_job_title').text
+			location = job.find_element(:class, 'job_location').text
+			apply_button = job.find_element(:css, '.apply_area > a')
+
+			jobs_applied_to << "#{company_name}: #{position} - (#{location})"
+			byebug
+			
+			apply_button.click
+
+		end
+
+
+		# name : title
+
+
+
+	end
+
+
+
+	def linkedin_bot
 		login
 		@driver.navigate.to JOBS_PAGE
 		JOB_BATCH_NUM.times {show_more_jobs}
 		get_job_links
 		iterate_jobs
-		@driver.quit
+
 	end
+
 
 	def login
 		@driver.navigate.to HOME
