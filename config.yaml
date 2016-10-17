@@ -4,6 +4,12 @@ linked_in:
   phone_num: "555-555-5555"
   resume_path: ""
 
+indeed:
+  email: ""
+  password: ""
+  phone_num: "555-555-5555"
+  resume_path: ""
+
 settings:
   #how many seconds between click/submit actions. increase if getting
   # a "spinner" related error
