@@ -2,7 +2,8 @@
 
 ![gif](http://res.cloudinary.com/dfkrjl3pb/image/upload/v1476654999/ezgif.com-video-to-gif_cpumze.gif)
 
-*** Experimental feature (10.16.2016): Integration with ZipRecruiter ***
+***Experimental feature (10.16.2016): Integration with ZipRecruiter***
+
 
 **Installation**
 
@@ -13,7 +14,7 @@
 variable by opening up your .bashrc (or .zshrc, etc) file
 and adding the following line:
 	`export PATH=$PATH:/chromedriver/location`
-* run script in repo directory with `ruby job_bot.rb -l`
+* run script in repo directory with `ruby job_bot.rb -l` or `ruby job_bot.rb -z` for zip recruiter
 
 *Jobs applied to are saved to log files created in the root repo directory
 in the format JobBot:YYYY-MM-DD&HH:MM*Â
