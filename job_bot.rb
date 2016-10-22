@@ -181,33 +181,42 @@ class JobBot
 	def get_job_links
 		sleep(LOAD_TIME)
 
-		puts @driver.title
-
-		links = @driver.find_elements(:css,".item	> a").map{|link| link.attribute(:href)}
-		companies = @driver.find_elements(:css,".job-info-container .col-right h3").map(&:text)
-		titles = @driver.find_elements(:css,".job-info-container .col-right h2").map(&:text)
-		companies = companies.map.with_index {|name, idx| name.concat(": #{titles[idx]}")}
-
-
-		@jobs = {}
-		companies.each.with_index do |company, idx|
-			@jobs[company] = links[idx]
+		all_jobs = @driver.find_elements(:class, 'item')
+		all_jobs.select! do |job|
+			job_info_container = job.find_elements(:css, '.job-info-container')
+			job_info_container.any?
 		end
+
+		@jobs = []
+
+		all_jobs.each do |job|
+			linkedin_apply = job.find_elements(:css, '.tags-container .in-apply-icon')
+
+			if linkedin_apply.any?
+				link = job.find_element(:css, 'a').attribute(:href)
+				position, company, location = job.text.split("\n")
+				@jobs << {position: position, company: company, location: location, link: link}
+			end
+
+		end
+
 	end
 
 	def go_to(link)
 		@driver.navigate.to link
 	end
 
-	def job_apply(apply_button, company)
+	def job_apply(apply_button, job)
+
 		apply_button.click
 		sleep(LOAD_TIME)
 
+		follow_radio_button = @driver.find_elements(:name, 'followCompany')
 
-		if !FOLLOW_COMPANIES && !company.include?('linkedin')
-			follow_radio_button = @driver.find_element(:name, 'followCompany')
-			follow_radio_button.click
+		if !FOLLOW_COMPANIES && follow_radio_button.any?
+			follow_radio_button[0].click
 		end
+
 
 		phone_field = @driver.find_element(:name, 'phone')
 		phone_field.clear
@@ -220,16 +229,18 @@ class JobBot
 		submit_app_button = @driver.find_element(:id, 'send-application-button')
 
 		unless TESTING
+			company, position, location = job[:company], job[:position], job[:location]
+			job_str = "#{company}: #{position} - (#{location})\n"
+			puts "Applying to #{job_str}"
 			submit_app_button.click
-			puts "Applied to #{company}"
-			@file.write("#{company}\n")
+			@file.write(job_str)
 		end
 
 		sleep(LOAD_TIME)
 	end
 
-	def is_job_acceptable?(apply_button, company)
-		apply_button.any? && FILTERS.none?{|filter| company.downcase.include?(filter)}
+	def is_job_acceptable?(apply_button, job)
+		apply_button.any? && FILTERS.none?{|filter| job[:company].downcase.include?(filter) || job[:position].downcase.include?(filter)}
 	end
 
 	def show_more_jobs
@@ -240,12 +251,13 @@ class JobBot
 	end
 
 	def iterate_jobs
-		@jobs.each do |company, link|
+		@jobs.each do |job|
+			company, link = job[:company], job[:link]
 			puts "going to #{company}"
 			go_to(link)
 			sleep(LOAD_TIME)
 			apply_button = @driver.find_elements(:id, 'apply-job-button')
-			job_apply(apply_button.first, company) if is_job_acceptable?(apply_button, company)
+			job_apply(apply_button.first, job) if is_job_acceptable?(apply_button, job)
 			sleep(LOAD_TIME)
 		end
 
