@@ -194,7 +194,8 @@ class JobBot
 
 			if linkedin_apply.any?
 				link = job.find_element(:css, 'a').attribute(:href)
-				position, company, location = job.text.split("\n")
+
+				position, company, location = job.text.split("\n")[1..3]
 				@jobs << {position: position, company: company, location: location, link: link}
 			end
 
@@ -236,7 +237,6 @@ class JobBot
 			@file.write(job_str)
 		end
 
-		sleep(LOAD_TIME)
 	end
 
 	def is_job_acceptable?(apply_button, job)
@@ -253,7 +253,6 @@ class JobBot
 	def iterate_jobs
 		@jobs.each do |job|
 			company, link = job[:company], job[:link]
-			puts "going to #{company}"
 			go_to(link)
 			sleep(LOAD_TIME)
 			apply_button = @driver.find_elements(:id, 'apply-job-button')
