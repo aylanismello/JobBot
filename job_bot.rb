@@ -17,7 +17,6 @@ class JobBot
 		FILTERS = CONFIG['settings']['filters'].map(&:downcase)
 		TESTING = CONFIG['settings']['testing']
 		LOAD_TIME = CONFIG['settings']['load_time']
-		JOB_BATCH_NUM = 2
 		BATCH_NUM = CONFIG['zip_recruiter']['batch_num']
 
 		APPLY_ID = "apply-job-button"
@@ -162,7 +161,19 @@ class JobBot
 		login
 		sleep(LOAD_TIME)
 		@driver.navigate.to JOBS_PAGE
-		JOB_BATCH_NUM.times {show_more_jobs}
+
+		expand_buttons = @driver.find_elements(:class, 'expand-button')
+		button_idx = 0
+
+		while expand_buttons.any?
+			break unless expand_buttons.count == (button_idx + 1)
+			expand_buttons[button_idx].click
+
+			sleep(LOAD_TIME)
+			expand_buttons = @driver.find_elements(:class, 'expand-button')
+			button_idx += 1
+		end
+
 		get_job_links
 		iterate_jobs
 
@@ -243,12 +254,6 @@ class JobBot
 		apply_button.any? && FILTERS.none?{|filter| job[:company].downcase.include?(filter) || job[:position].downcase.include?(filter)}
 	end
 
-	def show_more_jobs
-		sleep(LOAD_TIME)
-		expand_button = @driver.find_element(:class, 'expand-button')
-		expand_button.click
-		sleep(LOAD_TIME)
-	end
 
 	def iterate_jobs
 		@jobs.each do |job|
